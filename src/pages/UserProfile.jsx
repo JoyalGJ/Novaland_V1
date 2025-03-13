@@ -98,6 +98,7 @@ const UserProfile = () => {
           </li>
           <li><a href="#" className="hover:text-gray-300">My Properties</a></li>
           <li><a href="#" className="hover:text-gray-300">Transactions</a></li>
+          <li><a href="Chat" className="hover:text-gray-300">Conversations</a></li>
           <li><a href="#" className="hover:text-gray-300">Settings</a></li>
           <li><a href="#" className="text-red-500 hover:text-red-300">Logout</a></li>
         </ul>

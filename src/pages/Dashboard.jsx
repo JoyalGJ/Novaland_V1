@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, User, Settings, LogOut, DollarSign, Handshake, Plus } from "lucide-react"; // Icons for menu
+import { Home, User, Settings, LogOut, DollarSign, Handshake, Plus, ChartAreaIcon } from "lucide-react"; // Icons for menu
 import { Paper } from "@mui/material";  
 import {Link} from "react-router-dom";
 import { motion } from "framer-motion";
@@ -17,9 +17,11 @@ function Dashboard() {
           <a href="#" className="flex items-center space-x-3 p-2 hover:bg-indigo-700 rounded-md">
             <Home className="w-5 h-5" /> <span>My Properties</span>
           </a>
-          <a href="#" className="flex items-center space-x-3 p-2 hover:bg-indigo-700 rounded-md">
-            <Handshake className="w-5 h-5" /> <span>Offers</span>
-          </a>
+          <Link to="/Chat">
+            <a href="#" className="flex items-center space-x-3 p-2 hover:bg-indigo-700 rounded-md">
+              <ChartAreaIcon className="w-5 h-5" /> <span>Conversations</span>
+            </a>
+          </Link>
           <a href="#" className="flex items-center space-x-3 p-2 hover:bg-indigo-700 rounded-md">
             <DollarSign className="w-5 h-5" /> <span>Transactions</span>
           </a>

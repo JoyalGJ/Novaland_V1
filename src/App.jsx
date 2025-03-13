@@ -10,6 +10,8 @@ import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import SignInComponent from "./components/SignInComponent";
+import MakeOffer from "./components/MakeOffer.jsx";
+import Chatpage from "./pages/Chatpage.jsx";
 
 function App() {
     const address = useAddress();
@@ -60,6 +62,16 @@ function App() {
                         <SignedOut>
                             <Navigate to="/signin" replace />
                         </SignedOut>
+                    } />
+                    <Route path="/make-offer" element={
+                        <SignedIn>
+                            <MakeOffer />
+                        </SignedIn>
+                    } />
+                    <Route path="/Chat" element={
+                        <SignedIn>
+                            <Chatpage />
+                        </SignedIn>
                     } />
                 </Routes>
                 <Footer />
