@@ -137,117 +137,130 @@ const ChatPage = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar for Threads */}
-      <aside className="w-1/3 border-r p-4 overflow-y-auto bg-white">
-        <div className="flex justify-between mb-4">
+  {/* Sidebar for Threads */}
+  <aside className="w-1/3 border-r p-4 bg-white flex flex-col">
+    {/* Buyer/Seller Toggle */}
+    <div className="flex justify-between mb-4">
+      <button
+        onClick={() => setViewAsBuyer(true)}
+        className={`p-2 rounded-full font-medium transition-all ${
+          viewAsBuyer ? "bg-blue-600 text-white shadow-lg" : "bg-gray-200 text-gray-700"
+        }`}
+      >
+        View as Buyer
+      </button>
+      <button
+        onClick={() => setViewAsBuyer(false)}
+        className={`p-2 rounded-full font-medium transition-all ${
+          !viewAsBuyer ? "bg-blue-600 text-white shadow-lg" : "bg-gray-200 text-gray-700"
+        }`}
+      >
+        View as Seller
+      </button>
+    </div>
+
+    {/* Threads List */}
+    <div className="flex-1 overflow-y-auto">
+      {loadingThreads ? (
+        <p className="text-center text-gray-500">Loading threads...</p>
+      ) : (
+        threads
+          .filter((thread) =>
+            viewAsBuyer
+              ? thread.buyer_wallet === connectedWallet
+              : thread.seller_wallet === connectedWallet
+          )
+          .map((thread) => (
+            <div
+              key={thread.id}
+              className={`p-4 cursor-pointer rounded-lg mb-2 transition-all ${
+                thread.status === "closed"
+                  ? "bg-gray-300 text-gray-500"
+                  : activeThread?.id === thread.id
+                  ? "bg-blue-100 border-l-4 border-blue-600 shadow-md"
+                  : "hover:bg-gray-200"
+              }`}
+              onClick={() => {
+                setActiveThread(thread);
+                fetchMessages(thread.id);
+              }}
+            >
+              {getThreadTitle(thread)}
+            </div>
+          ))
+      )}
+    </div>
+  </aside>
+
+  {/* Chat Messages Panel */}
+  <div className="w-2/3 flex flex-col bg-white">
+    {activeThread ? (
+      <>
+        {/* Chat Header */}
+        <div className="border-b p-4 font-semibold text-lg bg-gray-50 shadow-sm">
+          {getThreadTitle(activeThread)}
+        </div>
+
+        {/* Messages Container */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          {loadingMessages ? (
+            <p className="text-center text-gray-500">Loading messages...</p>
+          ) : (
+            messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`max-w-xs px-4 py-2 rounded-lg text-sm shadow-md ${
+                  msg.sender_wallet === connectedWallet
+                    ? "bg-blue-500 text-white ml-auto"
+                    : "bg-gray-200 text-gray-900 mr-auto"
+                }`}
+              >
+                {msg.message}
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Chat Input Section */}
+        <div className="border-t p-4 bg-gray-50 flex items-center space-x-2">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message..."
+            className="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
           <button
-            onClick={() => setViewAsBuyer(true)}
-            className={`p-2 rounded ${
-              viewAsBuyer ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
+            onClick={handleSendMessage}
+            className="p-3 bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all"
           >
-            View as Buyer
-          </button>
-          <button
-            onClick={() => setViewAsBuyer(false)}
-            className={`p-2 rounded ${
-              !viewAsBuyer ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-          >
-            View as Seller
+            ➤
           </button>
         </div>
 
-        {loadingThreads ? (
-          <p>Loading threads...</p>
-        ) : (
-          threads
-            .filter((thread) =>
-              viewAsBuyer
-                ? thread.buyer_wallet === connectedWallet
-                : thread.seller_wallet === connectedWallet
-            )
-            .map((thread) => (
-              <div
-                key={thread.id}
-                className={`p-4 cursor-pointer border-b ${
-                  thread.status === "closed"
-                    ? "bg-gray-300 text-gray-500"
-                    : activeThread?.id === thread.id
-                    ? "bg-blue-100"
-                    : ""
-                }`}
-                onClick={() => {
-                  setActiveThread(thread);
-                  fetchMessages(thread.id);
-                }}
-              >
-                {getThreadTitle(thread)}
-              </div>
-            ))
-        )}
-      </aside>
+        {/* Offer Input Section */}
+        <div className="border-t p-4 bg-gray-50 flex items-center space-x-2">
+          <input
+            type="number"
+            value={offerPrice}
+            onChange={(e) => setOfferPrice(e.target.value)}
+            placeholder="Offer Price (ETH)"
+            className="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <button
+            onClick={handleMakeOffer}
+            className="p-3 bg-green-600 text-white rounded-full shadow-md hover:bg-green-700 transition-all"
+          >
+            💰
+          </button>
+        </div>
+      </>
+    ) : (
+      <p className="text-center text-gray-600 mt-20">Select a thread to start chatting.</p>
+    )}
+  </div>
+</div>
 
-      {/* Messages Panel */}
-      <div className="w-2/3 p-4">
-        {activeThread ? (
-          <>
-            <div className="border-b p-2 font-bold bg-white">
-              {getThreadTitle(activeThread)}
-            </div>
-
-            <div className="h-96 overflow-y-auto p-4 bg-white">
-              {loadingMessages ? (
-                <p>Loading messages...</p>
-              ) : (
-                messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`mb-2 p-2 rounded ${
-                      msg.sender_wallet === connectedWallet
-                        ? "bg-blue-200 ml-auto"
-                        : "bg-gray-200 mr-auto"
-                    }`}
-                  >
-                    {msg.message}
-                  </div>
-                ))
-              )}
-            </div>
-
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type a message..."
-              className="w-full p-2 border rounded mt-2"
-            />
-            <button
-              onClick={handleSendMessage}
-              className="mt-2 p-2 bg-blue-500 text-white rounded"
-            >
-              Send
-            </button>
-
-            <input
-              type="number"
-              value={offerPrice}
-              onChange={(e) => setOfferPrice(e.target.value)}
-              placeholder="Offer Price (ETH)"
-              className="w-full p-2 border rounded mt-2"
-            />
-            <button
-              onClick={handleMakeOffer}
-              className="mt-2 p-2 bg-green-500 text-white rounded"
-            >
-              Make Offer
-            </button>
-          </>
-        ) : (
-          <p className="text-gray-600">Select a thread to view messages.</p>
-        )}
-      </div>
-    </div>
   );
 };
 

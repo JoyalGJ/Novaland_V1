@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-8 px-6">
+    <footer className="bg-gradient-to-r from-purple-700 to-purple-800 text-white py-8 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left">
         <div>
           <h2 className="text-2xl font-bold">NovaLand</h2>
