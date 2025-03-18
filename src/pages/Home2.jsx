@@ -80,7 +80,6 @@ function Home2() {
       </div>
 
       {/* Footer */}
-      <Footer />
     </div>
   );
 }

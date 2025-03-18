@@ -84,7 +84,7 @@ function Signupcustom() {
     // Save to local storage & login
     localStorage.setItem("name", name);
     localStorage.setItem("email", email || "");
-    navigate("/expore");
+    navigate("/explore");
   };
 
   useEffect(() => {
@@ -119,7 +119,7 @@ function Signupcustom() {
           )}
           {isSignup && (
             <div className="space-y-2">
-              <Label>Email (Optional)</Label>
+              <Label>Email</Label>
               <Input
                 placeholder="you@example.com"
                 type="email"

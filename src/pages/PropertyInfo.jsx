@@ -80,15 +80,22 @@ function PropertyInfo() {
   }, [id]);
 
   const checkOfferStatus = async (propertyId) => {
+    if (!walletAddress) return; // Prevent unnecessary queries if wallet isn't connected
+  
     try {
+      const normalizedWallet = walletAddress.toLowerCase(); // Convert wallet address to lowercase
+  
       const { data, error } = await supabase
         .from("threads")
         .select("status")
         .eq("property_id", propertyId)
-        .eq("status", "open");
+        .eq("status", "open")
+        .eq("buyer_wallet", normalizedWallet); // Ensure correct case comparison
+    
+        console.log("Checking for offer:", { propertyId, normalizedWallet });
 
       if (error) throw error;
-      setIsOfferPending(data.length > 0); // true if at least one open offer exists
+      setIsOfferPending(data.length > 0); // True if an open offer exists
     } catch (err) {
       console.error("Error checking offer status:", err.message);
     }
